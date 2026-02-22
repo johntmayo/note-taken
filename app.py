@@ -37,7 +37,7 @@ def render_global_styles() -> None:
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=Merriweather:wght@400;700&display=swap');
         :root {
-            --paper: #ECEBE7;
+            --paper: #FDFBF7;
             --card: #FFFFFF;
             --ink: #1F2937;
             --ink-secondary: #4B5563;
@@ -47,16 +47,24 @@ def render_global_styles() -> None:
             --panel: #F0F4F8;
         }
 
+        header[data-testid="stHeader"],
+        div[data-testid="stToolbar"],
+        div[data-testid="stDecoration"],
+        #MainMenu,
+        footer {
+            display: none !important;
+        }
+
         .stApp {
             background: var(--paper);
             color: var(--ink);
         }
 
         .block-container {
-            margin-top: 2.6rem;
+            margin-top: 3rem;
             margin-bottom: 2rem;
-            padding: 2rem 1.8rem 1.6rem 1.8rem;
-            max-width: 860px;
+            padding: 2rem;
+            max-width: 900px;
             background: var(--card);
             border: 2px solid var(--line-strong);
             box-shadow: 6px 6px 0 var(--line-strong);
@@ -71,29 +79,30 @@ def render_global_styles() -> None:
 
         h1, h2, h3, h4, h5, h6, button, label,
         div[data-testid="stTabs"] button {
-            font-family: "Chivo", "Segoe UI", Arial, sans-serif !important;
+            font-family: "Chivo", sans-serif !important;
             letter-spacing: 0;
         }
 
-        h1 {
+        h1, .nt-title-text {
             color: var(--navy);
             font-weight: 800;
             margin: 0;
             line-height: 1.06;
             letter-spacing: -0.01em;
-            font-size: 2.15rem;
+            font-size: 2.1rem;
+            font-family: "Chivo", sans-serif !important;
         }
 
         .nt-title-row {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            margin-bottom: 0.45rem;
+            gap: 0.62rem;
+            margin-bottom: 0.42rem;
         }
 
         .nt-title-icon {
-            width: 2rem;
-            height: 2rem;
+            width: 2.25rem;
+            height: 2.25rem;
             flex-shrink: 0;
             display: block;
         }
@@ -460,11 +469,11 @@ title_icon_html = ""
 if logo_data_uri:
     title_icon_html = (
         f"<img src='data:image/svg+xml;base64,{logo_data_uri}' "
-        "alt='' class='nt-title-icon' width='32' height='32' style='width:2rem;height:2rem;'>"
+        "alt='' class='nt-title-icon' width='36' height='36' style='width:2.25rem;height:2.25rem;'>"
     )
 
 st.markdown(
-    f"<div class='nt-title-row'>{title_icon_html}<h1>Note Taken</h1></div>",
+    f"<div class='nt-title-row'>{title_icon_html}<div class='nt-title-text'>Note Taken</div></div>",
     unsafe_allow_html=True,
 )
 st.markdown(
