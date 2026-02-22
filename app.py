@@ -34,19 +34,168 @@ def render_global_styles() -> None:
     st.markdown(
         """
         <style>
-        .block-container {
-            padding-top: 1.2rem;
-            padding-bottom: 2rem;
-            max-width: 900px;
+        @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=Merriweather:wght@400;700&display=swap');
+
+        :root {
+            --paper: #FDFBF7;
+            --card: #FFFFFF;
+            --ink: #1F2937;
+            --muted: #4B5563;
+            --navy: #314059;
+            --gold: #F59E0B;
+            --clay: #BC5838;
+            --green: #283618;
+            --teal: #347072;
+            --line: #E5E7EB;
         }
-        h1, h2, h3 {
+
+        .stApp {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .block-container {
+            padding-top: 1.1rem;
+            padding-bottom: 2rem;
+            max-width: 920px;
+        }
+
+        p, span, label, li, input, textarea, .stMarkdown, .stCaption {
+            font-family: "Merriweather", serif !important;
+            color: var(--ink);
+            line-height: 1.45;
+        }
+
+        h1, h2, h3, h4, h5, h6, button, div[data-testid="stTabs"] button {
+            font-family: "Chivo", sans-serif !important;
             letter-spacing: -0.01em;
         }
-        div[data-testid="stHorizontalBlock"] {
-            gap: 0.5rem;
+
+        h1 {
+            color: var(--navy);
+            font-weight: 900;
+            margin-bottom: 0.1rem;
         }
+
+        h2 {
+            color: var(--navy);
+            font-size: 1.45rem;
+            margin-top: 0.25rem;
+            margin-bottom: 0.45rem;
+        }
+
+        h3 {
+            color: var(--navy);
+            font-size: 1.2rem;
+        }
+
+        div[data-testid="stHorizontalBlock"] {
+            gap: 0.55rem;
+        }
+
         div[data-testid="stTabs"] button {
-            font-weight: 600;
+            border: 2px solid var(--line);
+            border-radius: 4px 4px 0 0;
+            background: var(--card);
+            color: var(--muted);
+            font-weight: 800;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        div[data-testid="stTabs"] button[aria-selected="true"] {
+            color: var(--navy);
+            border-color: var(--navy);
+            box-shadow: 4px 4px 0 var(--gold);
+        }
+
+        div[data-testid="stForm"] {
+            background: var(--card);
+            border: 2px solid var(--line);
+            border-radius: 6px;
+            box-shadow: 6px 6px 0 rgba(49, 64, 89, 0.12);
+            padding: 0.75rem 0.75rem 0.2rem 0.75rem;
+        }
+
+        div[data-baseweb="input"] > div,
+        div[data-baseweb="textarea"] > div {
+            background: var(--card);
+            border: 2px solid var(--line);
+            border-radius: 6px;
+        }
+
+        div[data-baseweb="input"] > div:focus-within,
+        div[data-baseweb="textarea"] > div:focus-within {
+            border-color: var(--navy);
+            box-shadow: 0 0 0 2px rgba(49, 64, 89, 0.12);
+        }
+
+        button[kind="primary"] {
+            background: var(--navy) !important;
+            border: 2px solid var(--ink) !important;
+            color: #FFFFFF !important;
+            border-radius: 4px !important;
+            box-shadow: 4px 4px 0 var(--gold);
+            font-weight: 800 !important;
+        }
+
+        button[kind="secondary"] {
+            background: var(--card) !important;
+            border: 2px solid var(--line) !important;
+            color: var(--navy) !important;
+            border-radius: 4px !important;
+            font-weight: 700 !important;
+        }
+
+        button[kind="primary"]:hover,
+        button[kind="secondary"]:hover {
+            transform: translate(-1px, -1px);
+        }
+
+        div[data-testid="stExpander"] {
+            border: 2px solid var(--line);
+            border-radius: 6px;
+            box-shadow: 6px 6px 0 rgba(49, 64, 89, 0.1);
+            background: var(--card);
+        }
+
+        div[data-testid="stAlert"] {
+            border: 2px solid var(--line);
+            border-radius: 6px;
+        }
+
+        code, pre {
+            font-family: "Merriweather", serif !important;
+        }
+
+        .nt-tagline {
+            color: var(--muted);
+            margin-top: -0.5rem;
+            margin-bottom: 0.95rem;
+            font-size: 0.95rem;
+        }
+
+        .nt-kicker {
+            font-family: "Chivo", sans-serif !important;
+            color: var(--navy);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-size: 0.76rem;
+            font-weight: 800;
+            margin-top: 0.35rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .nt-subtle {
+            color: var(--muted);
+            margin-bottom: 0.6rem;
+            font-size: 0.93rem;
+        }
+
+        .nt-divider {
+            height: 2px;
+            background: linear-gradient(90deg, var(--navy), rgba(49, 64, 89, 0.1));
+            margin: 0.5rem 0 0.8rem 0;
         }
         </style>
         """,
@@ -239,6 +388,10 @@ restore_auth_from_cookie()
 render_global_styles()
 
 st.title("📝 Note Taken")
+st.markdown(
+    "<div class='nt-tagline'>Capture your notes on phone, review anywhere.</div>",
+    unsafe_allow_html=True,
+)
 
 if st.session_state["access_token"] and not st.session_state["user"]:
     try:
@@ -259,31 +412,36 @@ with top_right:
 if logout_clicked:
     clear_auth_state()
     st.rerun()
+st.markdown("<div class='nt-divider'></div>", unsafe_allow_html=True)
 
 tab_new, tab_notes = st.tabs(["New Note", "My Notes"])
 
 # --- New Note tab ---
 with tab_new:
-    st.caption("Use upload mode on mobile for the fastest capture flow.")
+    st.markdown("<div class='nt-kicker'>New Note</div>", unsafe_allow_html=True)
+    st.markdown(
+        "<div class='nt-subtle'>Capture or upload a photo, then transcribe and store it.</div>",
+        unsafe_allow_html=True,
+    )
     capture_mode = st.radio(
         "Capture mode",
-        options=["Upload / phone camera", "In-app camera"],
+        options=["In-app camera", "Upload / phone camera"],
         horizontal=True,
     )
 
     uploaded_file = None
     camera_photo = None
     nonce = st.session_state["capture_nonce"]
-    if capture_mode == "Upload / phone camera":
+    if capture_mode == "In-app camera":
+        camera_photo = st.camera_input(
+            "Take a photo (switch lens in camera controls if needed)",
+            key=f"camera_{nonce}",
+        )
+    else:
         uploaded_file = st.file_uploader(
             "Upload a photo",
             type=["jpg", "jpeg", "png"],
             key=f"uploader_{nonce}",
-        )
-    else:
-        camera_photo = st.camera_input(
-            "Take a photo (switch lens in camera controls if needed)",
-            key=f"camera_{nonce}",
         )
 
     input_source = uploaded_file or camera_photo
@@ -360,6 +518,7 @@ with tab_new:
                 )
 
     if st.session_state["latest_transcribed_text"]:
+        st.markdown("<div class='nt-kicker'>Latest Output</div>", unsafe_allow_html=True)
         st.subheader("Latest transcription")
         st.caption(f"Saved {st.session_state['latest_transcribed_time']}")
         st.code(st.session_state["latest_transcribed_text"])
@@ -373,6 +532,11 @@ with tab_new:
 
 # --- My Notes tab ---
 with tab_notes:
+    st.markdown("<div class='nt-kicker'>My Notes</div>", unsafe_allow_html=True)
+    st.markdown(
+        "<div class='nt-subtle'>Search, copy, or download any note you have saved.</div>",
+        unsafe_allow_html=True,
+    )
     try:
         notes = load_notes(st.session_state["access_token"])
     except Exception as e:
