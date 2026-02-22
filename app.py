@@ -61,9 +61,9 @@ def render_global_styles() -> None:
         }
 
         .block-container {
-            margin-top: 3rem;
+            margin-top: 0.8rem;
             margin-bottom: 2rem;
-            padding: 2rem;
+            padding: 1.85rem 1.85rem 1.6rem 1.85rem;
             max-width: 900px;
             background: var(--card);
             border: 2px solid var(--line-strong);
@@ -74,7 +74,7 @@ def render_global_styles() -> None:
         .stApp input, .stApp textarea, .stApp [data-testid="stCaptionContainer"] {
             font-family: "Merriweather", Georgia, serif !important;
             color: var(--ink);
-            line-height: 1.45;
+            line-height: 1.42;
         }
 
         h1, h2, h3, h4, h5, h6, button, label,
@@ -89,30 +89,30 @@ def render_global_styles() -> None:
             margin: 0;
             line-height: 1.06;
             letter-spacing: -0.01em;
-            font-size: 2.1rem;
+            font-size: 1.92rem;
             font-family: "Chivo", sans-serif !important;
         }
 
         .nt-title-row {
             display: flex;
             align-items: center;
-            gap: 0.62rem;
-            margin-bottom: 0.42rem;
+            gap: 0.58rem;
+            margin-bottom: 0.36rem;
         }
 
         .nt-title-icon {
-            width: 2.25rem;
-            height: 2.25rem;
+            width: 2.1rem;
+            height: 2.1rem;
             flex-shrink: 0;
             display: block;
         }
 
         h2 {
             color: var(--navy);
-            font-size: 1.45rem;
+            font-size: 1.38rem;
             font-weight: 700;
             margin-top: 0.15rem;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.55rem;
         }
 
         h3 {
@@ -132,10 +132,19 @@ def render_global_styles() -> None:
             background: var(--card);
             color: var(--ink-secondary);
             font-weight: 700;
-            padding: 0.5rem 0.95rem;
-            font-size: 0.86rem;
+            padding: 0.44rem 0.86rem;
+            font-size: 0.82rem;
             text-transform: none;
             letter-spacing: 0;
+        }
+
+        div[data-testid="stTabs"] {
+            margin-top: 0.1rem;
+        }
+
+        div[data-testid="stTabs"] [data-baseweb="tab-list"] {
+            gap: 0.25rem;
+            margin-bottom: 0.3rem;
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
@@ -158,10 +167,10 @@ def render_global_styles() -> None:
         div[data-testid="stForm"] label,
         div[data-testid="stWidgetLabel"] label {
             margin-top: 0.3rem;
-            margin-bottom: 0.22rem;
-            font-size: 0.72rem;
+            margin-bottom: 0.2rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.045em;
             color: var(--ink);
             font-weight: 700;
         }
@@ -176,7 +185,7 @@ def render_global_styles() -> None:
         div[data-baseweb="input"] > div:focus-within,
         div[data-baseweb="textarea"] > div:focus-within {
             border-color: var(--navy);
-            box-shadow: none;
+            box-shadow: 0 0 0 2px rgba(49, 64, 89, 0.1);
         }
 
         button[kind="primary"] {
@@ -199,19 +208,35 @@ def render_global_styles() -> None:
             box-shadow: none !important;
         }
 
+        button[kind="primary"], button[kind="secondary"] {
+            transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+        }
+
         button[kind="primary"]:hover {
             transform: translate(-1px, -1px);
             box-shadow: 5px 5px 0 var(--line-strong) !important;
         }
 
         button[kind="secondary"]:hover {
-            transform: none;
+            transform: translate(0, -1px);
+            background: #F8FAFC !important;
+        }
+
+        button[kind="primary"]:disabled,
+        button[kind="secondary"]:disabled {
+            background: #F3F4F6 !important;
+            color: var(--ink-secondary) !important;
+            border: 2px solid var(--line) !important;
+            box-shadow: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+            cursor: not-allowed !important;
         }
 
         div[data-testid="stButton"] > button {
-            min-height: 2.25rem;
-            padding: 0.4rem 0.82rem;
-            font-size: 0.9rem;
+            min-height: 2.15rem;
+            padding: 0.38rem 0.78rem;
+            font-size: 0.86rem;
         }
 
         div[data-testid="stExpander"] {
@@ -226,6 +251,32 @@ def render_global_styles() -> None:
             border-radius: 0;
         }
 
+        div[data-testid="stAlert"][kind="info"] {
+            background: var(--panel);
+            border-left: 4px solid var(--navy);
+            border-top: 2px solid var(--line);
+            border-right: 2px solid var(--line);
+            border-bottom: 2px solid var(--line);
+            color: var(--ink-secondary);
+        }
+
+        section[data-testid="stFileUploaderDropzone"] {
+            border: 2px solid var(--line);
+            border-radius: 0;
+            background: #FAFBFC;
+        }
+
+        section[data-testid="stFileUploaderDropzone"]:hover {
+            border-color: var(--navy);
+            background: #F7FAFC;
+        }
+
+        div[data-testid="stCameraInput"] {
+            border: 2px solid var(--line);
+            padding: 0.5rem;
+            background: #FAFBFC;
+        }
+
         div[data-testid="stRadio"] label {
             text-transform: none !important;
             letter-spacing: 0 !important;
@@ -238,11 +289,17 @@ def render_global_styles() -> None:
             font-family: "Merriweather", serif !important;
         }
 
+        pre {
+            border: 2px solid var(--line);
+            border-radius: 0 !important;
+            background: #FAFBFC !important;
+        }
+
         .nt-tagline {
             color: var(--ink-secondary);
             margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 0.76rem;
+            margin-bottom: 0.78rem;
+            font-size: 0.74rem;
         }
 
         .nt-kicker {
@@ -250,7 +307,7 @@ def render_global_styles() -> None:
             color: var(--navy);
             text-transform: uppercase;
             letter-spacing: 0.06em;
-            font-size: 0.74rem;
+            font-size: 0.71rem;
             font-weight: 700;
             margin-top: 0.45rem;
             margin-bottom: 0.15rem;
@@ -263,6 +320,12 @@ def render_global_styles() -> None:
             background: var(--panel);
             border-left: 4px solid var(--navy);
             padding: 0.55rem 0.7rem;
+        }
+
+        .nt-mode {
+            color: var(--ink-secondary);
+            font-size: 0.8rem;
+            margin: 0.25rem 0 0.45rem 0;
         }
 
         .nt-divider {
@@ -354,7 +417,6 @@ def init_auth_state() -> None:
     st.session_state.setdefault("access_token", None)
     st.session_state.setdefault("refresh_token", None)
     st.session_state.setdefault("user", None)
-    st.session_state.setdefault("auth_cookie_checked", False)
 
 
 def save_refresh_cookie(refresh_token: str) -> None:
@@ -370,14 +432,12 @@ def clear_refresh_cookie() -> None:
     cookie_manager.delete(REFRESH_COOKIE)
 
 
-def set_auth_state(payload: dict, remember_me: bool) -> None:
+def set_auth_state(payload: dict) -> None:
     st.session_state["access_token"] = payload["access_token"]
     st.session_state["refresh_token"] = payload.get("refresh_token")
     st.session_state["user"] = get_current_user(payload["access_token"])
-    if remember_me and st.session_state["refresh_token"]:
+    if st.session_state["refresh_token"]:
         save_refresh_cookie(st.session_state["refresh_token"])
-    elif not remember_me:
-        clear_refresh_cookie()
 
 
 def clear_auth_state() -> None:
@@ -391,6 +451,7 @@ def init_ui_state() -> None:
     st.session_state.setdefault("capture_nonce", 0)
     st.session_state.setdefault("latest_transcribed_text", "")
     st.session_state.setdefault("latest_transcribed_time", "")
+    st.session_state.setdefault("capture_mode", None)
 
 
 def reset_capture_widgets() -> None:
@@ -398,21 +459,17 @@ def reset_capture_widgets() -> None:
 
 
 def restore_auth_from_cookie() -> None:
-    if st.session_state["auth_cookie_checked"]:
-        return
-
-    st.session_state["auth_cookie_checked"] = True
     if st.session_state["access_token"]:
         return
 
-    refresh_token = cookie_manager.get(REFRESH_COOKIE)
+    refresh_token = st.session_state.get("refresh_token") or cookie_manager.get(REFRESH_COOKIE)
     if not refresh_token:
         return
 
     try:
         payload = refresh_session(refresh_token)
         # If refresh succeeds, rotate to latest refresh token and keep cookie alive.
-        set_auth_state(payload, remember_me=True)
+        set_auth_state(payload)
     except Exception:
         clear_refresh_cookie()
 
@@ -425,12 +482,11 @@ def render_auth_ui() -> None:
         with st.form("sign_in_form"):
             email = st.text_input("Email", key="signin_email")
             password = st.text_input("Password", type="password", key="signin_password")
-            remember_me = st.checkbox("Remember me for 30 days", value=True)
             submitted = st.form_submit_button("Sign In")
         if submitted:
             try:
                 payload = sign_in(email=email, password=password)
-                set_auth_state(payload, remember_me=remember_me)
+                set_auth_state(payload)
                 st.success("Signed in.")
                 st.rerun()
             except Exception as e:
@@ -446,7 +502,7 @@ def render_auth_ui() -> None:
                 payload = sign_up(email=email, password=password)
                 # If email confirmation is enabled, Supabase may return no session yet.
                 if payload.get("access_token"):
-                    set_auth_state(payload, remember_me=True)
+                    set_auth_state(payload)
                     st.success("Account created and signed in.")
                     st.rerun()
                 else:
@@ -469,7 +525,7 @@ title_icon_html = ""
 if logo_data_uri:
     title_icon_html = (
         f"<img src='data:image/svg+xml;base64,{logo_data_uri}' "
-        "alt='' class='nt-title-icon' width='36' height='36' style='width:2.25rem;height:2.25rem;'>"
+        "alt='' class='nt-title-icon' width='34' height='34' style='width:2.1rem;height:2.1rem;'>"
     )
 
 st.markdown(
@@ -485,7 +541,15 @@ if st.session_state["access_token"] and not st.session_state["user"]:
     try:
         st.session_state["user"] = get_current_user(st.session_state["access_token"])
     except Exception:
-        clear_auth_state()
+        refresh_token = st.session_state.get("refresh_token") or cookie_manager.get(REFRESH_COOKIE)
+        if refresh_token:
+            try:
+                payload = refresh_session(refresh_token)
+                set_auth_state(payload)
+            except Exception:
+                clear_auth_state()
+        else:
+            clear_auth_state()
 
 if not st.session_state["access_token"]:
     render_auth_ui()
@@ -511,46 +575,63 @@ with tab_new:
         "<div class='nt-subtle'>Capture or upload a photo, then transcribe and store it.</div>",
         unsafe_allow_html=True,
     )
-    capture_mode = st.radio(
-        "Capture mode",
-        options=["In-app camera", "Upload / phone camera"],
-        horizontal=True,
-    )
+    capture_mode = st.session_state.get("capture_mode")
+    mode_take_col, mode_upload_col = st.columns(2)
+    with mode_take_col:
+        take_type = "primary" if capture_mode == "In-app camera" else "secondary"
+        if st.button("Take photo", type=take_type, use_container_width=True):
+            st.session_state["capture_mode"] = "In-app camera"
+            reset_capture_widgets()
+            st.rerun()
+    with mode_upload_col:
+        upload_type = "primary" if capture_mode == "Upload / phone camera" else "secondary"
+        if st.button("Upload photo", type=upload_type, use_container_width=True):
+            st.session_state["capture_mode"] = "Upload / phone camera"
+            reset_capture_widgets()
+            st.rerun()
 
-    uploaded_file = None
-    camera_photo = None
-    nonce = st.session_state["capture_nonce"]
-    if capture_mode == "In-app camera":
-        camera_photo = st.camera_input(
-            "Take a photo (switch lens in camera controls if needed)",
-            key=f"camera_{nonce}",
-        )
+    capture_mode = st.session_state.get("capture_mode")
+    if not capture_mode:
+        st.markdown("<div class='nt-mode'>Choose how you want to add your note image.</div>", unsafe_allow_html=True)
+        input_source = None
     else:
-        uploaded_file = st.file_uploader(
-            "Upload a photo",
-            type=["jpg", "jpeg", "png"],
-            key=f"uploader_{nonce}",
-        )
+        st.markdown(f"<div class='nt-mode'>Current mode: {capture_mode}</div>", unsafe_allow_html=True)
 
-    input_source = uploaded_file or camera_photo
+        uploaded_file = None
+        camera_photo = None
+        nonce = st.session_state["capture_nonce"]
+        if capture_mode == "In-app camera":
+            camera_photo = st.camera_input(
+                "Take a photo (switch lens in camera controls if needed)",
+                key=f"camera_{nonce}",
+            )
+        else:
+            uploaded_file = st.file_uploader(
+                "Upload a photo",
+                type=["jpg", "jpeg", "png"],
+                key=f"uploader_{nonce}",
+            )
+
+        input_source = uploaded_file or camera_photo
 
     action_primary, action_secondary = st.columns([3, 2])
     with action_primary:
         transcribe_clicked = st.button(
-            "Transcribe & Save",
+            "Transcribe and save note",
             type="primary",
             use_container_width=True,
             disabled=not bool(input_source),
         )
     with action_secondary:
         reset_clicked = st.button(
-            "Reset Photo",
+            "Start over",
             use_container_width=True,
             disabled=not bool(input_source),
         )
 
     if reset_clicked:
         reset_capture_widgets()
+        st.session_state["capture_mode"] = None
         st.rerun()
 
     if transcribe_clicked and input_source:
