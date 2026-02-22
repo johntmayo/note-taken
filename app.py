@@ -34,10 +34,8 @@ cookie_manager = stx.CookieManager()
 def render_global_styles() -> None:
     st.markdown(
         """
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
         <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=Merriweather:wght@400;700&display=swap');
         :root {
             --paper: #EBE9E4;
             --card: #FFFFFF;
@@ -450,7 +448,7 @@ title_icon_html = ""
 if logo_data_uri:
     title_icon_html = (
         f"<img src='data:image/svg+xml;base64,{logo_data_uri}' "
-        "alt='' class='nt-title-icon'>"
+        "alt='' class='nt-title-icon' width='28' height='28'>"
     )
 
 st.markdown(
