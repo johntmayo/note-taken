@@ -37,13 +37,14 @@ def render_global_styles() -> None:
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=Merriweather:wght@400;700&display=swap');
         :root {
-            --paper: #EBE9E4;
+            --paper: #ECEBE7;
             --card: #FFFFFF;
             --ink: #1F2937;
-            --muted: #4B5563;
+            --ink-secondary: #4B5563;
             --navy: #314059;
             --line: #E5E7EB;
             --line-strong: #1F2937;
+            --panel: #F0F4F8;
         }
 
         .stApp {
@@ -52,32 +53,24 @@ def render_global_styles() -> None:
         }
 
         .block-container {
-            padding-top: 1.9rem;
-            padding-bottom: 2.3rem;
-            max-width: 900px;
+            margin-top: 2.6rem;
+            margin-bottom: 2rem;
+            padding: 2rem 1.8rem 1.6rem 1.8rem;
+            max-width: 860px;
             background: var(--card);
             border: 2px solid var(--line-strong);
-            box-shadow: 6px 6px 0 rgba(31, 41, 55, 0.22);
+            box-shadow: 6px 6px 0 var(--line-strong);
         }
 
-        div[data-testid="stAppViewContainer"],
-        div[data-testid="stAppViewContainer"] p,
-        div[data-testid="stAppViewContainer"] span,
-        div[data-testid="stAppViewContainer"] label,
-        div[data-testid="stAppViewContainer"] li,
-        div[data-testid="stAppViewContainer"] input,
-        div[data-testid="stAppViewContainer"] textarea,
-        div[data-testid="stAppViewContainer"] .stMarkdown,
-        div[data-testid="stAppViewContainer"] .stCaption {
+        .stApp, .stApp p, .stApp span, .stApp li,
+        .stApp input, .stApp textarea, .stApp [data-testid="stCaptionContainer"] {
             font-family: "Merriweather", Georgia, serif !important;
             color: var(--ink);
-            line-height: 1.5;
+            line-height: 1.45;
         }
 
-        h1, h2, h3, h4, h5, h6,
-        button,
-        div[data-testid="stTabs"] button,
-        div[data-testid="stForm"] button {
+        h1, h2, h3, h4, h5, h6, button, label,
+        div[data-testid="stTabs"] button {
             font-family: "Chivo", "Segoe UI", Arial, sans-serif !important;
             letter-spacing: 0;
         }
@@ -86,57 +79,62 @@ def render_global_styles() -> None:
             color: var(--navy);
             font-weight: 800;
             margin: 0;
-            line-height: 1.05;
+            line-height: 1.06;
             letter-spacing: -0.01em;
+            font-size: 2.15rem;
         }
 
         .nt-title-row {
             display: flex;
             align-items: center;
-            gap: 0.55rem;
-            margin-bottom: 0.32rem;
+            gap: 0.6rem;
+            margin-bottom: 0.45rem;
         }
 
         .nt-title-icon {
-            width: 1.55rem;
-            height: 1.55rem;
+            width: 2rem;
+            height: 2rem;
             flex-shrink: 0;
+            display: block;
         }
 
         h2 {
             color: var(--navy);
-            font-size: 1.5rem;
-            margin-top: 0.3rem;
-            margin-bottom: 0.8rem;
+            font-size: 1.45rem;
+            font-weight: 700;
+            margin-top: 0.15rem;
+            margin-bottom: 0.6rem;
         }
 
         h3 {
             color: var(--navy);
             font-size: 1.2rem;
+            font-weight: 700;
         }
 
         div[data-testid="stHorizontalBlock"] {
-            gap: 0.75rem;
+            gap: 0.6rem;
         }
 
         div[data-testid="stTabs"] button {
             border: 2px solid var(--line);
+            border-bottom: 0;
             border-radius: 0;
             background: var(--card);
-            color: var(--muted);
+            color: var(--ink-secondary);
             font-weight: 700;
-            padding: 0.6rem 1rem;
+            padding: 0.5rem 0.95rem;
             font-size: 0.86rem;
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
+            text-transform: none;
+            letter-spacing: 0;
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
             color: var(--navy);
             border-color: var(--navy);
             box-shadow: none;
-            border-bottom: 2px solid var(--navy);
-            background: #F8FAFC;
+            border-bottom: 2px solid var(--card);
+            background: var(--card);
         }
 
         div[data-testid="stForm"] {
@@ -144,22 +142,32 @@ def render_global_styles() -> None:
             border: 2px solid var(--line);
             border-radius: 0;
             box-shadow: none;
-            padding: 1rem 1rem 0.5rem 1rem;
-            margin-top: 0.35rem;
+            padding: 1rem 1rem 0.55rem 1rem;
+            margin-top: 0.2rem;
         }
 
-        div[data-baseweb="input"] > div,
-        div[data-baseweb="textarea"] > div {
+        div[data-testid="stForm"] label,
+        div[data-testid="stWidgetLabel"] label {
+            margin-top: 0.3rem;
+            margin-bottom: 0.22rem;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        div[data-baseweb="input"] > div, div[data-baseweb="textarea"] > div {
             background: var(--card);
-            border: 1px solid var(--line);
+            border: 2px solid var(--line);
             border-radius: 0;
-            min-height: 2.25rem;
+            min-height: 2.1rem;
         }
 
         div[data-baseweb="input"] > div:focus-within,
         div[data-baseweb="textarea"] > div:focus-within {
             border-color: var(--navy);
-            box-shadow: 0 0 0 1px rgba(49, 64, 89, 0.15);
+            box-shadow: none;
         }
 
         button[kind="primary"] {
@@ -167,14 +175,14 @@ def render_global_styles() -> None:
             border: 2px solid var(--line-strong) !important;
             color: #FFFFFF !important;
             border-radius: 0 !important;
-            box-shadow: none !important;
+            box-shadow: 4px 4px 0 var(--line-strong) !important;
             font-weight: 700 !important;
             letter-spacing: 0 !important;
         }
 
         button[kind="secondary"] {
             background: var(--card) !important;
-            border: 1px solid var(--line) !important;
+            border: 2px solid var(--line) !important;
             color: var(--navy) !important;
             border-radius: 0 !important;
             font-weight: 700 !important;
@@ -182,14 +190,18 @@ def render_global_styles() -> None:
             box-shadow: none !important;
         }
 
-        button[kind="primary"]:hover,
+        button[kind="primary"]:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 5px 5px 0 var(--line-strong) !important;
+        }
+
         button[kind="secondary"]:hover {
             transform: none;
         }
 
         div[data-testid="stButton"] > button {
-            min-height: 2.2rem;
-            padding: 0.45rem 0.8rem;
+            min-height: 2.25rem;
+            padding: 0.4rem 0.82rem;
             font-size: 0.9rem;
         }
 
@@ -205,47 +217,47 @@ def render_global_styles() -> None:
             border-radius: 0;
         }
 
+        div[data-testid="stRadio"] label {
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            font-family: "Merriweather", Georgia, serif !important;
+            font-size: 0.9rem !important;
+            color: var(--ink-secondary) !important;
+        }
+
         code, pre {
             font-family: "Merriweather", serif !important;
         }
 
         .nt-tagline {
-            color: var(--muted);
+            color: var(--ink-secondary);
             margin-top: 0;
-            margin-bottom: 1.2rem;
-            font-size: 0.78rem;
-        }
-
-        .nt-topbar {
-            background: transparent;
-            color: var(--ink);
-            border: 0;
-            font-family: "Chivo", "Segoe UI", Arial, sans-serif;
-            font-size: 0;
-            font-weight: 700;
-            padding: 0;
-            margin: 0;
+            margin-bottom: 1rem;
+            font-size: 0.76rem;
         }
 
         .nt-kicker {
             font-family: "Chivo", sans-serif !important;
             color: var(--navy);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
             font-size: 0.74rem;
-            font-weight: 800;
-            margin-top: 0.65rem;
-            margin-bottom: 0.2rem;
+            font-weight: 700;
+            margin-top: 0.45rem;
+            margin-bottom: 0.15rem;
         }
 
         .nt-subtle {
-            color: var(--muted);
-            margin-bottom: 0.9rem;
-            font-size: 0.86rem;
+            color: var(--ink-secondary);
+            margin-bottom: 0.8rem;
+            font-size: 0.84rem;
+            background: var(--panel);
+            border-left: 4px solid var(--navy);
+            padding: 0.55rem 0.7rem;
         }
 
         .nt-divider {
-            height: 1px;
+            height: 2px;
             background: var(--line);
             margin: 0.85rem 0 1rem 0;
         }
@@ -448,7 +460,7 @@ title_icon_html = ""
 if logo_data_uri:
     title_icon_html = (
         f"<img src='data:image/svg+xml;base64,{logo_data_uri}' "
-        "alt='' class='nt-title-icon' width='28' height='28'>"
+        "alt='' class='nt-title-icon' width='32' height='32' style='width:2rem;height:2rem;'>"
     )
 
 st.markdown(
