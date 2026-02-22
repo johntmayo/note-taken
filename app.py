@@ -61,9 +61,9 @@ def render_global_styles() -> None:
         }
 
         .block-container {
-            margin-top: 0.8rem;
+            margin-top: 0.25rem;
             margin-bottom: 2rem;
-            padding: 1.85rem 1.85rem 1.6rem 1.85rem;
+            padding: 0.95rem 1.85rem 1.6rem 1.85rem;
             max-width: 900px;
             background: var(--card);
             border: 2px solid var(--line-strong);
@@ -198,6 +198,13 @@ def render_global_styles() -> None:
             letter-spacing: 0 !important;
         }
 
+        button[kind="primary"] *,
+        button[kind="primary"] span,
+        button[kind="primary"] p {
+            color: #FFFFFF !important;
+            fill: #FFFFFF !important;
+        }
+
         button[kind="secondary"] {
             background: var(--card) !important;
             border: 2px solid var(--line) !important;
@@ -231,6 +238,13 @@ def render_global_styles() -> None:
             opacity: 1 !important;
             transform: none !important;
             cursor: not-allowed !important;
+        }
+
+        button[kind="primary"]:disabled *,
+        button[kind="primary"]:disabled span,
+        button[kind="primary"]:disabled p {
+            color: var(--ink-secondary) !important;
+            fill: var(--ink-secondary) !important;
         }
 
         div[data-testid="stButton"] > button {
