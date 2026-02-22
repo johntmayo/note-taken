@@ -2,6 +2,7 @@ import streamlit as st
 import anthropic
 import base64
 import requests
+from pathlib import Path
 from datetime import datetime, timedelta
 import extra_streamlit_components as stx  # type: ignore[import-not-found]
 
@@ -37,16 +38,13 @@ def render_global_styles() -> None:
         @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=Merriweather:wght@400;700&display=swap');
 
         :root {
-            --paper: #FDFBF7;
+            --paper: #E9E8E4;
             --card: #FFFFFF;
             --ink: #1F2937;
             --muted: #4B5563;
             --navy: #314059;
-            --gold: #F59E0B;
-            --clay: #BC5838;
-            --green: #283618;
-            --teal: #347072;
-            --line: #E5E7EB;
+            --line: #D7DCE3;
+            --line-strong: #1F2937;
         }
 
         .stApp {
@@ -55,9 +53,12 @@ def render_global_styles() -> None:
         }
 
         .block-container {
-            padding-top: 1.1rem;
-            padding-bottom: 2rem;
-            max-width: 920px;
+            padding-top: 1.5rem;
+            padding-bottom: 2.2rem;
+            max-width: 860px;
+            background: var(--card);
+            border: 2px solid var(--line-strong);
+            box-shadow: 6px 6px 0 rgba(31, 41, 55, 0.28);
         }
 
         p, span, label, li, input, textarea, .stMarkdown, .stCaption {
@@ -74,8 +75,22 @@ def render_global_styles() -> None:
         h1 {
             color: var(--navy);
             font-weight: 900;
-            margin-bottom: 0.1rem;
-            line-height: 1.06;
+            margin: 0;
+            line-height: 1.05;
+            letter-spacing: -0.01em;
+        }
+
+        .nt-title-row {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .nt-title-icon {
+            width: 1.85rem;
+            height: 1.85rem;
+            flex-shrink: 0;
         }
 
         h2 {
@@ -96,26 +111,27 @@ def render_global_styles() -> None:
 
         div[data-testid="stTabs"] button {
             border: 2px solid var(--line);
-            border-radius: 4px 4px 0 0;
+            border-radius: 0;
             background: var(--card);
             color: var(--muted);
             font-weight: 700;
-            padding: 0.55rem 0.95rem;
-            font-size: 1.06rem;
+            padding: 0.5rem 0.85rem;
+            font-size: 0.98rem;
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
             color: var(--navy);
             border-color: var(--navy);
             box-shadow: none;
-            border-bottom: 3px solid var(--gold);
+            border-bottom: 3px solid var(--navy);
+            background: #F8FAFC;
         }
 
         div[data-testid="stForm"] {
             background: var(--card);
             border: 2px solid var(--line);
-            border-radius: 6px;
-            box-shadow: 6px 6px 0 rgba(49, 64, 89, 0.12);
+            border-radius: 0;
+            box-shadow: none;
             padding: 0.75rem 0.75rem 0.2rem 0.75rem;
         }
 
@@ -123,7 +139,7 @@ def render_global_styles() -> None:
         div[data-baseweb="textarea"] > div {
             background: var(--card);
             border: 2px solid var(--line);
-            border-radius: 6px;
+            border-radius: 0;
         }
 
         div[data-baseweb="input"] > div:focus-within,
@@ -134,9 +150,9 @@ def render_global_styles() -> None:
 
         button[kind="primary"] {
             background: var(--navy) !important;
-            border: 2px solid var(--ink) !important;
+            border: 2px solid var(--line-strong) !important;
             color: #FFFFFF !important;
-            border-radius: 4px !important;
+            border-radius: 0 !important;
             box-shadow: none !important;
             font-weight: 700 !important;
             letter-spacing: 0 !important;
@@ -146,7 +162,7 @@ def render_global_styles() -> None:
             background: var(--card) !important;
             border: 2px solid var(--line) !important;
             color: var(--navy) !important;
-            border-radius: 4px !important;
+            border-radius: 0 !important;
             font-weight: 700 !important;
             letter-spacing: 0 !important;
             box-shadow: none !important;
@@ -165,14 +181,14 @@ def render_global_styles() -> None:
 
         div[data-testid="stExpander"] {
             border: 2px solid var(--line);
-            border-radius: 6px;
-            box-shadow: 6px 6px 0 rgba(49, 64, 89, 0.1);
+            border-radius: 0;
+            box-shadow: none;
             background: var(--card);
         }
 
         div[data-testid="stAlert"] {
             border: 2px solid var(--line);
-            border-radius: 6px;
+            border-radius: 0;
         }
 
         code, pre {
@@ -187,23 +203,21 @@ def render_global_styles() -> None:
         }
 
         .nt-topbar {
-            background: var(--navy);
-            color: #FFFFFF;
-            border: 2px solid #233148;
-            border-radius: 2px;
-            box-shadow: 6px 6px 0 rgba(31, 41, 55, 0.18);
+            background: transparent;
+            color: var(--ink);
+            border: 0;
             font-family: "Chivo", "Segoe UI", Arial, sans-serif;
-            font-size: 1.05rem;
+            font-size: 0;
             font-weight: 700;
-            padding: 0.5rem 0.8rem;
-            margin-bottom: 0.9rem;
+            padding: 0;
+            margin: 0;
         }
 
         .nt-kicker {
             font-family: "Chivo", sans-serif !important;
             color: var(--navy);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.05em;
             font-size: 0.76rem;
             font-weight: 800;
             margin-top: 0.35rem;
@@ -217,8 +231,8 @@ def render_global_styles() -> None:
         }
 
         .nt-divider {
-            height: 2px;
-            background: linear-gradient(90deg, var(--navy), rgba(49, 64, 89, 0.1));
+            height: 1px;
+            background: var(--line);
             margin: 0.5rem 0 0.8rem 0;
         }
         </style>
@@ -411,8 +425,22 @@ init_ui_state()
 restore_auth_from_cookie()
 render_global_styles()
 
-st.markdown("<div class='nt-topbar'>Note Taken</div>", unsafe_allow_html=True)
-st.title("📝 Note Taken")
+logo_data_uri = ""
+logo_path = Path(__file__).with_name("note_taken.svg")
+if logo_path.exists():
+    logo_data_uri = base64.b64encode(logo_path.read_bytes()).decode("utf-8")
+
+title_icon_html = ""
+if logo_data_uri:
+    title_icon_html = (
+        f"<img src='data:image/svg+xml;base64,{logo_data_uri}' "
+        "alt='' class='nt-title-icon'>"
+    )
+
+st.markdown(
+    f"<div class='nt-title-row'>{title_icon_html}<h1>Note Taken</h1></div>",
+    unsafe_allow_html=True,
+)
 st.markdown(
     "<div class='nt-tagline'>Capture your notes on phone, review anywhere.</div>",
     unsafe_allow_html=True,
