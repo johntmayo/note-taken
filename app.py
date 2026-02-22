@@ -42,6 +42,8 @@ def render_global_styles() -> None:
             --ink: #1F2937;
             --ink-secondary: #4B5563;
             --navy: #314059;
+            --gold: #F59E0B;
+            --clay: #BC5838;
             --line: #E5E7EB;
             --line-strong: #1F2937;
             --panel: #F0F4F8;
@@ -168,9 +170,9 @@ def render_global_styles() -> None:
         div[data-testid="stWidgetLabel"] label {
             margin-top: 0.3rem;
             margin-bottom: 0.2rem;
-            font-size: 0.7rem;
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 0.045em;
+            letter-spacing: 0.05em;
             color: var(--ink);
             font-weight: 700;
         }
@@ -185,24 +187,16 @@ def render_global_styles() -> None:
         div[data-baseweb="input"] > div:focus-within,
         div[data-baseweb="textarea"] > div:focus-within {
             border-color: var(--navy);
-            box-shadow: 0 0 0 2px rgba(49, 64, 89, 0.1);
         }
 
         button[kind="primary"] {
-            background: var(--navy) !important;
+            background: var(--gold) !important;
             border: 2px solid var(--line-strong) !important;
-            color: #FFFFFF !important;
+            color: var(--ink) !important;
             border-radius: 0 !important;
             box-shadow: 4px 4px 0 var(--line-strong) !important;
             font-weight: 700 !important;
             letter-spacing: 0 !important;
-        }
-
-        button[kind="primary"] *,
-        button[kind="primary"] span,
-        button[kind="primary"] p {
-            color: #FFFFFF !important;
-            fill: #FFFFFF !important;
         }
 
         button[kind="secondary"] {
@@ -216,12 +210,12 @@ def render_global_styles() -> None:
         }
 
         button[kind="primary"], button[kind="secondary"] {
-            transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
         }
 
         button[kind="primary"]:hover {
-            transform: translate(-1px, -1px);
-            box-shadow: 5px 5px 0 var(--line-strong) !important;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--line-strong) !important;
         }
 
         button[kind="secondary"]:hover {
@@ -231,7 +225,7 @@ def render_global_styles() -> None:
 
         button[kind="primary"]:disabled,
         button[kind="secondary"]:disabled {
-            background: #F3F4F6 !important;
+            background: #E5E7EB !important;
             color: var(--ink-secondary) !important;
             border: 2px solid var(--line) !important;
             box-shadow: none !important;
@@ -245,6 +239,25 @@ def render_global_styles() -> None:
         button[kind="primary"]:disabled p {
             color: var(--ink-secondary) !important;
             fill: var(--ink-secondary) !important;
+        }
+
+        div[data-testid="stDownloadButton"] button {
+            background: var(--clay) !important;
+            border: 2px solid var(--line-strong) !important;
+            color: #FFFFFF !important;
+            border-radius: 0 !important;
+            box-shadow: 4px 4px 0 var(--line-strong) !important;
+            font-weight: 700 !important;
+        }
+
+        div[data-testid="stDownloadButton"] button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 var(--line-strong) !important;
+        }
+
+        div[data-testid="stDownloadButton"] button * {
+            color: #FFFFFF !important;
+            fill: #FFFFFF !important;
         }
 
         div[data-testid="stButton"] > button {
