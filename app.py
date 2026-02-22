@@ -34,16 +34,17 @@ cookie_manager = stx.CookieManager()
 def render_global_styles() -> None:
     st.markdown(
         """
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=Merriweather:wght@400;700&display=swap');
-
         :root {
-            --paper: #E9E8E4;
+            --paper: #EBE9E4;
             --card: #FFFFFF;
             --ink: #1F2937;
             --muted: #4B5563;
             --navy: #314059;
-            --line: #D7DCE3;
+            --line: #E5E7EB;
             --line-strong: #1F2937;
         }
 
@@ -53,28 +54,39 @@ def render_global_styles() -> None:
         }
 
         .block-container {
-            padding-top: 1.5rem;
-            padding-bottom: 2.2rem;
-            max-width: 860px;
+            padding-top: 1.9rem;
+            padding-bottom: 2.3rem;
+            max-width: 900px;
             background: var(--card);
             border: 2px solid var(--line-strong);
-            box-shadow: 6px 6px 0 rgba(31, 41, 55, 0.28);
+            box-shadow: 6px 6px 0 rgba(31, 41, 55, 0.22);
         }
 
-        p, span, label, li, input, textarea, .stMarkdown, .stCaption {
+        div[data-testid="stAppViewContainer"],
+        div[data-testid="stAppViewContainer"] p,
+        div[data-testid="stAppViewContainer"] span,
+        div[data-testid="stAppViewContainer"] label,
+        div[data-testid="stAppViewContainer"] li,
+        div[data-testid="stAppViewContainer"] input,
+        div[data-testid="stAppViewContainer"] textarea,
+        div[data-testid="stAppViewContainer"] .stMarkdown,
+        div[data-testid="stAppViewContainer"] .stCaption {
             font-family: "Merriweather", Georgia, serif !important;
             color: var(--ink);
-            line-height: 1.45;
+            line-height: 1.5;
         }
 
-        h1, h2, h3, h4, h5, h6, button, div[data-testid="stTabs"] button {
+        h1, h2, h3, h4, h5, h6,
+        button,
+        div[data-testid="stTabs"] button,
+        div[data-testid="stForm"] button {
             font-family: "Chivo", "Segoe UI", Arial, sans-serif !important;
             letter-spacing: 0;
         }
 
         h1 {
             color: var(--navy);
-            font-weight: 900;
+            font-weight: 800;
             margin: 0;
             line-height: 1.05;
             letter-spacing: -0.01em;
@@ -84,20 +96,20 @@ def render_global_styles() -> None:
             display: flex;
             align-items: center;
             gap: 0.55rem;
-            margin-bottom: 0.15rem;
+            margin-bottom: 0.32rem;
         }
 
         .nt-title-icon {
-            width: 1.85rem;
-            height: 1.85rem;
+            width: 1.55rem;
+            height: 1.55rem;
             flex-shrink: 0;
         }
 
         h2 {
             color: var(--navy);
-            font-size: 1.45rem;
-            margin-top: 0.25rem;
-            margin-bottom: 0.45rem;
+            font-size: 1.5rem;
+            margin-top: 0.3rem;
+            margin-bottom: 0.8rem;
         }
 
         h3 {
@@ -106,7 +118,7 @@ def render_global_styles() -> None:
         }
 
         div[data-testid="stHorizontalBlock"] {
-            gap: 0.55rem;
+            gap: 0.75rem;
         }
 
         div[data-testid="stTabs"] button {
@@ -115,15 +127,17 @@ def render_global_styles() -> None:
             background: var(--card);
             color: var(--muted);
             font-weight: 700;
-            padding: 0.5rem 0.85rem;
-            font-size: 0.98rem;
+            padding: 0.6rem 1rem;
+            font-size: 0.86rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
             color: var(--navy);
             border-color: var(--navy);
             box-shadow: none;
-            border-bottom: 3px solid var(--navy);
+            border-bottom: 2px solid var(--navy);
             background: #F8FAFC;
         }
 
@@ -132,20 +146,22 @@ def render_global_styles() -> None:
             border: 2px solid var(--line);
             border-radius: 0;
             box-shadow: none;
-            padding: 0.75rem 0.75rem 0.2rem 0.75rem;
+            padding: 1rem 1rem 0.5rem 1rem;
+            margin-top: 0.35rem;
         }
 
         div[data-baseweb="input"] > div,
         div[data-baseweb="textarea"] > div {
             background: var(--card);
-            border: 2px solid var(--line);
+            border: 1px solid var(--line);
             border-radius: 0;
+            min-height: 2.25rem;
         }
 
         div[data-baseweb="input"] > div:focus-within,
         div[data-baseweb="textarea"] > div:focus-within {
             border-color: var(--navy);
-            box-shadow: 0 0 0 2px rgba(49, 64, 89, 0.12);
+            box-shadow: 0 0 0 1px rgba(49, 64, 89, 0.15);
         }
 
         button[kind="primary"] {
@@ -160,7 +176,7 @@ def render_global_styles() -> None:
 
         button[kind="secondary"] {
             background: var(--card) !important;
-            border: 2px solid var(--line) !important;
+            border: 1px solid var(--line) !important;
             color: var(--navy) !important;
             border-radius: 0 !important;
             font-weight: 700 !important;
@@ -174,9 +190,9 @@ def render_global_styles() -> None:
         }
 
         div[data-testid="stButton"] > button {
-            min-height: 2.45rem;
-            padding: 0.42rem 0.9rem;
-            font-size: 1rem;
+            min-height: 2.2rem;
+            padding: 0.45rem 0.8rem;
+            font-size: 0.9rem;
         }
 
         div[data-testid="stExpander"] {
@@ -197,9 +213,9 @@ def render_global_styles() -> None:
 
         .nt-tagline {
             color: var(--muted);
-            margin-top: -0.5rem;
-            margin-bottom: 0.95rem;
-            font-size: 0.95rem;
+            margin-top: 0;
+            margin-bottom: 1.2rem;
+            font-size: 0.78rem;
         }
 
         .nt-topbar {
@@ -218,22 +234,22 @@ def render_global_styles() -> None:
             color: var(--navy);
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            font-size: 0.76rem;
+            font-size: 0.74rem;
             font-weight: 800;
-            margin-top: 0.35rem;
-            margin-bottom: 0.15rem;
+            margin-top: 0.65rem;
+            margin-bottom: 0.2rem;
         }
 
         .nt-subtle {
             color: var(--muted);
-            margin-bottom: 0.6rem;
-            font-size: 0.93rem;
+            margin-bottom: 0.9rem;
+            font-size: 0.86rem;
         }
 
         .nt-divider {
             height: 1px;
             background: var(--line);
-            margin: 0.5rem 0 0.8rem 0;
+            margin: 0.85rem 0 1rem 0;
         }
         </style>
         """,
