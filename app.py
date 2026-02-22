@@ -61,20 +61,21 @@ def render_global_styles() -> None:
         }
 
         p, span, label, li, input, textarea, .stMarkdown, .stCaption {
-            font-family: "Merriweather", serif !important;
+            font-family: "Merriweather", Georgia, serif !important;
             color: var(--ink);
             line-height: 1.45;
         }
 
         h1, h2, h3, h4, h5, h6, button, div[data-testid="stTabs"] button {
-            font-family: "Chivo", sans-serif !important;
-            letter-spacing: -0.01em;
+            font-family: "Chivo", "Segoe UI", Arial, sans-serif !important;
+            letter-spacing: 0;
         }
 
         h1 {
             color: var(--navy);
             font-weight: 900;
             margin-bottom: 0.1rem;
+            line-height: 1.06;
         }
 
         h2 {
@@ -98,15 +99,16 @@ def render_global_styles() -> None:
             border-radius: 4px 4px 0 0;
             background: var(--card);
             color: var(--muted);
-            font-weight: 800;
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
+            font-weight: 700;
+            padding: 0.55rem 0.95rem;
+            font-size: 1.06rem;
         }
 
         div[data-testid="stTabs"] button[aria-selected="true"] {
             color: var(--navy);
             border-color: var(--navy);
-            box-shadow: 4px 4px 0 var(--gold);
+            box-shadow: none;
+            border-bottom: 3px solid var(--gold);
         }
 
         div[data-testid="stForm"] {
@@ -135,8 +137,9 @@ def render_global_styles() -> None:
             border: 2px solid var(--ink) !important;
             color: #FFFFFF !important;
             border-radius: 4px !important;
-            box-shadow: 4px 4px 0 var(--gold);
-            font-weight: 800 !important;
+            box-shadow: none !important;
+            font-weight: 700 !important;
+            letter-spacing: 0 !important;
         }
 
         button[kind="secondary"] {
@@ -145,11 +148,19 @@ def render_global_styles() -> None:
             color: var(--navy) !important;
             border-radius: 4px !important;
             font-weight: 700 !important;
+            letter-spacing: 0 !important;
+            box-shadow: none !important;
         }
 
         button[kind="primary"]:hover,
         button[kind="secondary"]:hover {
-            transform: translate(-1px, -1px);
+            transform: none;
+        }
+
+        div[data-testid="stButton"] > button {
+            min-height: 2.45rem;
+            padding: 0.42rem 0.9rem;
+            font-size: 1rem;
         }
 
         div[data-testid="stExpander"] {
@@ -173,6 +184,19 @@ def render_global_styles() -> None:
             margin-top: -0.5rem;
             margin-bottom: 0.95rem;
             font-size: 0.95rem;
+        }
+
+        .nt-topbar {
+            background: var(--navy);
+            color: #FFFFFF;
+            border: 2px solid #233148;
+            border-radius: 2px;
+            box-shadow: 6px 6px 0 rgba(31, 41, 55, 0.18);
+            font-family: "Chivo", "Segoe UI", Arial, sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            padding: 0.5rem 0.8rem;
+            margin-bottom: 0.9rem;
         }
 
         .nt-kicker {
@@ -387,6 +411,7 @@ init_ui_state()
 restore_auth_from_cookie()
 render_global_styles()
 
+st.markdown("<div class='nt-topbar'>Note Taken</div>", unsafe_allow_html=True)
 st.title("📝 Note Taken")
 st.markdown(
     "<div class='nt-tagline'>Capture your notes on phone, review anywhere.</div>",
@@ -404,11 +429,11 @@ if not st.session_state["access_token"]:
     st.stop()
 
 user = st.session_state["user"]
-top_left, top_right = st.columns([3, 1])
+top_left, top_right = st.columns([4.2, 1])
 with top_left:
     st.caption(f"Signed in as: {user.get('email', 'unknown user')}")
 with top_right:
-    logout_clicked = st.button("Log out", use_container_width=True)
+    logout_clicked = st.button("Log out")
 if logout_clicked:
     clear_auth_state()
     st.rerun()
