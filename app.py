@@ -30,6 +30,30 @@ COOKIE_DAYS = 30
 cookie_manager = stx.CookieManager()
 
 
+def render_global_styles() -> None:
+    st.markdown(
+        """
+        <style>
+        .block-container {
+            padding-top: 1.2rem;
+            padding-bottom: 2rem;
+            max-width: 900px;
+        }
+        h1, h2, h3 {
+            letter-spacing: -0.01em;
+        }
+        div[data-testid="stHorizontalBlock"] {
+            gap: 0.5rem;
+        }
+        div[data-testid="stTabs"] button {
+            font-weight: 600;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def supabase_headers(access_token: str | None = None) -> dict[str, str]:
     headers = {
         "apikey": SUPABASE_ANON_KEY,
@@ -141,6 +165,16 @@ def clear_auth_state() -> None:
     clear_refresh_cookie()
 
 
+def init_ui_state() -> None:
+    st.session_state.setdefault("capture_nonce", 0)
+    st.session_state.setdefault("latest_transcribed_text", "")
+    st.session_state.setdefault("latest_transcribed_time", "")
+
+
+def reset_capture_widgets() -> None:
+    st.session_state["capture_nonce"] += 1
+
+
 def restore_auth_from_cookie() -> None:
     if st.session_state["auth_cookie_checked"]:
         return
@@ -200,7 +234,9 @@ def render_auth_ui() -> None:
 
 
 init_auth_state()
+init_ui_state()
 restore_auth_from_cookie()
+render_global_styles()
 
 st.title("📝 Note Taken")
 
@@ -215,8 +251,12 @@ if not st.session_state["access_token"]:
     st.stop()
 
 user = st.session_state["user"]
-st.caption(f"Signed in as: {user.get('email', 'unknown user')}")
-if st.button("Log out"):
+top_left, top_right = st.columns([3, 1])
+with top_left:
+    st.caption(f"Signed in as: {user.get('email', 'unknown user')}")
+with top_right:
+    logout_clicked = st.button("Log out", use_container_width=True)
+if logout_clicked:
     clear_auth_state()
     st.rerun()
 
@@ -224,7 +264,7 @@ tab_new, tab_notes = st.tabs(["New Note", "My Notes"])
 
 # --- New Note tab ---
 with tab_new:
-    st.caption("Tip: Upload mode is usually best on mobile and avoids the large in-app camera view.")
+    st.caption("Use upload mode on mobile for the fastest capture flow.")
     capture_mode = st.radio(
         "Capture mode",
         options=["Upload / phone camera", "In-app camera"],
@@ -233,63 +273,103 @@ with tab_new:
 
     uploaded_file = None
     camera_photo = None
+    nonce = st.session_state["capture_nonce"]
     if capture_mode == "Upload / phone camera":
-        uploaded_file = st.file_uploader("Upload a photo", type=["jpg", "jpeg", "png"])
+        uploaded_file = st.file_uploader(
+            "Upload a photo",
+            type=["jpg", "jpeg", "png"],
+            key=f"uploader_{nonce}",
+        )
     else:
-        camera_photo = st.camera_input("Take a photo (switch lens in camera controls if needed)")
+        camera_photo = st.camera_input(
+            "Take a photo (switch lens in camera controls if needed)",
+            key=f"camera_{nonce}",
+        )
 
     input_source = uploaded_file or camera_photo
 
-    if st.button("Transcribe & Save", type="primary", use_container_width=True, disabled=not bool(input_source)):
-        if input_source:
-            with st.spinner("Claude is reading your handwriting..."):
-                binary_data = input_source.getvalue()
-                base64_image = base64.b64encode(binary_data).decode("utf-8")
+    action_primary, action_secondary = st.columns([3, 2])
+    with action_primary:
+        transcribe_clicked = st.button(
+            "Transcribe & Save",
+            type="primary",
+            use_container_width=True,
+            disabled=not bool(input_source),
+        )
+    with action_secondary:
+        reset_clicked = st.button(
+            "Reset Photo",
+            use_container_width=True,
+            disabled=not bool(input_source),
+        )
 
-                try:
-                    message = client.messages.create(
-                        model=ANTHROPIC_MODEL,
-                        max_tokens=1024,
-                        messages=[
-                            {
-                                "role": "user",
-                                "content": [
-                                    {
-                                        "type": "image",
-                                        "source": {
-                                            "type": "base64",
-                                            "media_type": "image/jpeg",
-                                            "data": base64_image,
-                                        },
+    if reset_clicked:
+        reset_capture_widgets()
+        st.rerun()
+
+    if transcribe_clicked and input_source:
+        with st.spinner("Claude is reading your handwriting..."):
+            binary_data = input_source.getvalue()
+            base64_image = base64.b64encode(binary_data).decode("utf-8")
+
+            try:
+                message = client.messages.create(
+                    model=ANTHROPIC_MODEL,
+                    max_tokens=1024,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "image",
+                                    "source": {
+                                        "type": "base64",
+                                        "media_type": "image/jpeg",
+                                        "data": base64_image,
                                     },
-                                    {
-                                        "type": "text",
-                                        "text": "Please transcribe these handwritten notes exactly as written. Only output the transcribed text.",
-                                    },
-                                ],
-                            }
-                        ],
-                    )
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "Please transcribe these handwritten notes exactly as written. Only output the transcribed text.",
+                                },
+                            ],
+                        }
+                    ],
+                )
 
-                    text = message.content[0].text
+                text = message.content[0].text
 
-                    # Save to Supabase
-                    save_note(
-                        content=text,
-                        access_token=st.session_state["access_token"],
-                        user_id=user["id"],
-                    )
+                # Save to Supabase
+                save_note(
+                    content=text,
+                    access_token=st.session_state["access_token"],
+                    user_id=user["id"],
+                )
 
-                    st.success("Saved!")
-                    st.subheader("Transcribed:")
-                    st.text_area("", value=text, height=200, disabled=True, label_visibility="collapsed")
+                st.session_state["latest_transcribed_text"] = text
+                st.session_state["latest_transcribed_time"] = datetime.utcnow().strftime("%b %d, %Y %I:%M %p UTC")
+                st.success("Saved.")
+                reset_capture_widgets()
+                st.rerun()
 
-                except Exception as e:
-                    st.error(f"Error: {e}")
-                    st.caption(
-                        "Tip: check `ANTHROPIC_MODEL` in your Streamlit Cloud Secrets "
-                        "if you need a different model."
-                    )
+            except Exception as e:
+                st.error(f"Error: {e}")
+                st.caption(
+                    "Tip: check `ANTHROPIC_MODEL` in your Streamlit Cloud Secrets "
+                    "if you need a different model."
+                )
+
+    if st.session_state["latest_transcribed_text"]:
+        st.subheader("Latest transcription")
+        st.caption(f"Saved {st.session_state['latest_transcribed_time']}")
+        st.code(st.session_state["latest_transcribed_text"])
+        st.download_button(
+            "Download as .txt",
+            data=st.session_state["latest_transcribed_text"],
+            file_name=f"note-{datetime.utcnow().strftime('%Y%m%d-%H%M%S')}.txt",
+            mime="text/plain",
+            use_container_width=True,
+        )
 
 # --- My Notes tab ---
 with tab_notes:
@@ -299,18 +379,26 @@ with tab_notes:
         st.error(f"Could not load notes: {e}")
         notes = []
 
-    if not notes:
+    search_query = st.text_input("Search notes", placeholder="Filter by keyword")
+    filtered_notes = notes
+    if search_query:
+        query = search_query.lower()
+        filtered_notes = [n for n in notes if query in n["content"].lower()]
+
+    if not filtered_notes:
         st.info("No notes yet. Take a photo in the New Note tab.")
     else:
-        for n in notes:
+        st.caption(f"{len(filtered_notes)} note(s)")
+        for n in filtered_notes:
             dt = datetime.fromisoformat(n["created_at"].replace("Z", "+00:00")).strftime("%b %d, %Y at %I:%M %p")
             with st.expander(f"📄 {dt}", expanded=False):
-                st.text_area(
-                    "Content",
-                    value=n["content"],
-                    height=120,
-                    disabled=True,
-                    key=n["id"],
-                    label_visibility="collapsed",
+                st.code(n["content"])
+                st.caption("Use the copy icon in the code block, or download below.")
+                st.download_button(
+                    "Download note",
+                    data=n["content"],
+                    file_name=f"note-{n['id']}.txt",
+                    mime="text/plain",
+                    key=f"download_{n['id']}",
+                    use_container_width=True,
                 )
-                st.caption("Select and copy the text above.")
